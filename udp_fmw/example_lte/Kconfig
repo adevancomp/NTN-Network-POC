@@ -1,0 +1,31 @@
+menu "NTN POC LTE UDP Example"
+
+config LTE_UDP_SERVER_ADDRESS
+	string "UDP server IPv4 address"
+	default "CHANGE_ME"
+	help
+	  Public IPv4 address of the EC2 UDP server.
+
+config LTE_UDP_SERVER_PORT
+	int "UDP server port"
+	default 9000
+
+config LTE_UDP_APN
+	string "APN"
+	default ""
+	help
+	  Optional APN. Leave empty to use the SIM/operator default.
+
+config LTE_UDP_RECONNECT_DELAY_SECONDS
+	int "Reconnect delay in seconds"
+	default 30
+
+module = LTE_UDP_BUTTON
+module-str = LTE UDP button example
+source "$(ZEPHYR_BASE)/subsys/logging/Kconfig.template.log_config"
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu
