@@ -1,0 +1,62 @@
+menu "NTN GEO UDP POC"
+
+config NTN_GEO_UDP_SERVER_ADDRESS
+	string "UDP server IPv4 address"
+	default "CHANGE_ME"
+	help
+	  Public IPv4 address of the UDP server.
+
+config NTN_GEO_UDP_SERVER_PORT
+	int "UDP server port"
+	default 9000
+
+config NTN_GEO_UDP_APN
+	string "NTN APN"
+	default ""
+	help
+	  Optional NTN APN. Leave empty to keep the SIM/operator default.
+
+config NTN_GEO_UDP_LOCATION_VALIDITY_SECONDS
+	int "Location validity in seconds"
+	default 0
+	help
+	  Validity passed to AT%LOCATION after the GNSS fix. Use 0 for infinite validity
+	  when static.
+
+config NTN_GEO_UDP_GNSS_TIMEOUT_SECONDS
+	int "GNSS fix timeout"
+	default 600
+	help
+	  Maximum time to wait for a GNSS fix before configuring NTN.
+
+config NTN_GEO_UDP_BANDLOCK
+	string "NTN band lock list"
+	default "255"
+	help
+	  Comma-separated band list for AT%XBANDLOCK. Brazil GEO NTN tests are expected
+	  on B255.
+
+config NTN_GEO_UDP_RAI_ONE_RESP
+	bool "Set CP-RAI one-response indication"
+	default y
+	select LTE_RAI_REQ
+	help
+	  Set SO_RAI to RAI_ONE_RESP before sending the UDP packet. This mirrors the
+	  PDF troubleshooting note for CP-RAI using AT#XSOCKETOPT=1,61,3, but through
+	  the Zephyr/nRF modem socket API.
+
+config NTN_GEO_UDP_CONNECT_TIMEOUT_SECONDS
+	int "Registration timeout"
+	default 1800
+	help
+	  Maximum time to wait for NTN registration and PDN activation.
+
+module = NTN_GEO_UDP
+module-str = NTN GEO UDP POC
+source "$(ZEPHYR_BASE)/subsys/logging/Kconfig.template.log_config"
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu
